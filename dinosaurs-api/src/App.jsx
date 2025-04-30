@@ -7,24 +7,55 @@ const estadoInicial = {
     nome_cientifico: '',
     nome_popular: '',
     localizacao: '',
-    link: '',
     data: '',
-    img: '',
-    descricao: '',
+
   },
   resultados: [],
-  status: false,
+  status: 'carregando' | 'sucesso' | 'erro',
   erro: null,
 
 }
 
 const reducer =  (state, action) =>{
+  switch (action.type) {
 
+    case 'SET_FILTROS':
+      return{
+        ...state,
+        filtros : action.payload,
+      };
+
+    case 'SET_RESULTADOS':
+      return{
+        ...state,
+        resultados: action.payload,
+        status: 'sucesso',
+        erro: null
+      };
+
+    case 'SET_CARREGANDO':
+      return{
+        ...state,
+        status: 'carregando'
+      };
+
+    case 'SET_ERRO':
+      return{
+        ...state,
+        erro: action.payload,
+        status: 'erro'
+      };
+  
+    default:
+      return state;
+
+  }
 
 }
 
 function App() {
   
+  const [state, dispatch] = useReducer(reducer, estadoInicial)
 
   return (
     <div>
