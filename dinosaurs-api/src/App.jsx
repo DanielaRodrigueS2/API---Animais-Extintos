@@ -1,13 +1,15 @@
-import { useState } from 'react'
-import { useReducer } from 'react'
+
+import { useReducer , useEffect} from 'react'
+import {useForm} from 'react-hook-form'
 
 const estadoInicial = {
 
   filtros:{
-    nome_cientifico: '',
-    nome_popular: '',
-    localizacao: '',
-    data: '',
+    Nome_cientifico: '',
+    Nome_popular: '',
+    Localizacao: '',
+    Data:'',
+    Reino:'',
 
   },
   resultados: [],
@@ -56,10 +58,40 @@ const reducer =  (state, action) =>{
 function App() {
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
+  const {register,handleSubmit,watch,formState: {errors},} = useForm()
+
+  const onSubmit = (data) => {
+    dispatch({type: 'SET_FILTROS', payload: data})
+  }
+
+  useEffect(() =>{
+    
+  },[state.filtros])
+  
 
   return (
-    <div>
-      <h1>Teste</h1>
+    <div className='geral'>
+      <div className='header'>
+        <form onSubmit={handleSubmit(onSubmit)}> 
+          <input {...register('Nome_Cientifico')} placeholder='Nome Cientifico'/>
+          <input {...register('Nome_Popular', {required: true, maxLength: 25})} placeholder='Nome Popular'/>
+          {errors.nome_popular && <span>Valor inválido</span>}
+          <input {...register('Localizacao')} placeholder='Localizacao'/>
+          <input type='number'{...register('Data', {min: 1000, max: 2025})} placeholder='Data'/>
+          <select {...register('Reino', {required: true})}>
+            <option value='Fungi'>Fungi</option>
+            <option value='Animalia'>Plantae</option>
+            <option value='Plantae'>Animalia</option>
+          </select>
+          <input type='submit'/>
+
+        </form>
+      </div>
+
+      <div className='main'>
+
+
+      </div>
     </div>
   )
 
