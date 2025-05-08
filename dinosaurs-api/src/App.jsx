@@ -19,7 +19,7 @@ const estadoInicial = {
 const reducer =  (state, action) =>{
   switch (action.type) {
 
-    case 'SET_FILTROS'/'  1':
+    case 'SET_FILTROS':
       return{
         ...state,
         filtros : action.payload,
@@ -74,12 +74,12 @@ function App() {
     const carregarListas = async () =>{
       try{
         const [ingredientes, categorias, locais] = await Promise.all([
-          fetch('www.themealdb.com/api/json/v1/1/list.php?i=list'), //Adicionar os links
-          fetch('www.themealdb.com/api/json/v1/1/list.php?c=list'),
-          fetch('www.themealdb.com/api/json/v1/1/list.php?a=list'),
+          fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list'), //Adicionar os links
+          fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list'),
+          fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list'),
         ])
 
-        const [ingredientesJSON, categoriasJSON, locaisJSON] = await Promisse.all([
+        const [ingredientesJSON, categoriasJSON, locaisJSON] = await Promise.all([
           ingredientes.json(),
           categorias.json(),
           locais.json()
@@ -87,9 +87,10 @@ function App() {
 
         setListas({ingredientes : ingredientesJSON.meals.map((m) => m.strIngredient),
           categorias : categoriasJSON.meals.map((m) => m.strCategory),
-          locais : locaisJSON.meal.map((m) => m.strArea)
+          locais : locaisJSON.meals.map((m) => m.strArea)
         })
       
+        console.log(listas)
       }
       catch(error){
 
@@ -97,7 +98,7 @@ function App() {
 
       }
     }
-
+    carregarListas()
 
   }, []) 
 
@@ -122,7 +123,6 @@ function App() {
       const resposta = await fetch(url)
       const json = await resposta.json()
       dispatch({type: 'SET_RESULTADOS', payload: json.meals || []})
-      console.log(state.resultados)
 
     }
     catch(error){
@@ -155,10 +155,10 @@ function App() {
           </select>
 
           <select {...register('Valor', {required: true})}>
-            <option value=''>Selecione o Parâmetro</option>
-            {watchTipo === 'Ingrediente Principal' && listas.ingredientes.map((item, index) => (<option key={index} value={item}>{item}</option>))}
-            {watchTipo === 'Categoria' && listas.categorias.map((item, index) => (<option key={index} value={item}>{item}</option>))}
-            {watchTipo === 'Local' && listas.locais.map((item, index) => (<option key={index} value={item}>{item}</option>))}
+            <option value=''>Selecione o filtro</option>
+            {watchTipo === 'Ingrediente Principal' && listas.ingredientes.map((item) => (<option key={item} value={item}>{item}</option>))}
+            {watchTipo === 'Categoria' && listas.categorias.map((item) => (<option key={item} value={item}>{item}</option>))}
+            {watchTipo === 'Local' && listas.locais.map((item) => (<option key={item} value={item}>{item}</option>))}
           </select>
           <input type='submit'/>
         </form>
