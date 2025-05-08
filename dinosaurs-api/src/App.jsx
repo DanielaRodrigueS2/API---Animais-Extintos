@@ -2,6 +2,7 @@
 import { useReducer , useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 
+// Armazena o Tipo de pesquisa e seu valor correpondente, armazena os resultados, erros e status
 const estadoInicial = {
 
   filtros:{
@@ -14,10 +15,11 @@ const estadoInicial = {
 
 }
 
+// Reducer pra gerenciar o estado inicial
 const reducer =  (state, action) =>{
   switch (action.type) {
 
-    case 'SET_FILTROS':
+    case 'SET_FILTROS'/'  1':
       return{
         ...state,
         filtros : action.payload,
@@ -55,13 +57,45 @@ function App() {
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
   const {register,handleSubmit,watch, setValue,} = useForm()
-  const [opcoes, setOpcoes] = useState([])
+  const [listas, setListas] = useState()
 
   const watchTipo = watch('Tipo')
 
   const onSubmit = (data) => {
     dispatch({type: 'SET_FILTROS', payload: data})
   }
+
+  // Coletar todos os ingredientes, categorias e locais/areas disponiveis para filtro de comidas
+  useEffect(() =>{
+    const carregarListas = async () =>{
+      try{
+        const [ingredientes, categorias, locais] = await Promise.all([
+          fetch(), //Adicionar os links
+          fetch(),
+          fetch(),
+        ])
+
+        const [ingredientesJSON, categoriasJSON, locaisJSON] = await Promisse.all([
+          ingredientes.json(),
+          categorias.json(),
+          locais.json()
+        ])
+
+        setListas({ingredientes : ingredientesJSON.meals.map((m) => m.strIngredient),
+          categorias : categoriasJSON.meals.map((m) => m.strCategory),
+          locais : locaisJSON.meal.map((m) => m.strArea)
+        })
+      
+      }
+      catch(error){
+
+        console.log('Erro ao carregar listas', error)
+
+      }
+    }
+
+
+  }, []) 
 
   const comunicacao = async () =>{
     dispatch({type: 'SET_CARREGANDO'})
