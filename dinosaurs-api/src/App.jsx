@@ -56,7 +56,12 @@ const reducer =  (state, action) =>{
 function App() {
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
-  const {register,handleSubmit,watch, setValue,} = useForm()
+  const {register,handleSubmit,watch, setValue,} = useForm({
+    defaultValues : {
+      Tipo: '',
+      Valor: '',
+    }
+  })
   const [listas, setListas] = useState({
     ingredientes: [],
     categorias: [],
@@ -64,6 +69,7 @@ function App() {
   })
 
   const watchTipo = watch('Tipo')
+  console.log('Tipo selecionado:', watchTipo)
 
   const onSubmit = (data) => {
     dispatch({type: 'SET_FILTROS', payload: data})
@@ -90,18 +96,17 @@ function App() {
           locais : locaisJSON.meals.map((m) => m.strArea)
         })
       
-        console.log(listas)
       }
       catch(error){
 
         console.log('Erro ao carregar listas', error)
-
       }
     }
     carregarListas()
 
   }, []) 
 
+  // Função responsável por buscar os valores dependendo do tipo e valor
   const comunicacao = async () =>{
     dispatch({type: 'SET_CARREGANDO'})
     try{
@@ -134,6 +139,7 @@ function App() {
 
   }
 
+  // Chama a comunicação() quando os filtros são alterados
   useEffect(() =>{
 
     if(state.filtros.Valor && state.filtros.Tipo) {
@@ -142,13 +148,21 @@ function App() {
 
   },[state.filtros])
 
-  
+  //Apenas para testes
+  useEffect(() =>{
+    console.log(listas);
+  }, [listas])
+
+  useEffect(() =>{
+    console.log(state.resultados)
+  }, [state.resultados])
 
   return (
     <div className='geral'>
       <div className='header'>
         <form onSubmit={handleSubmit(onSubmit)}> 
           <select {...register('Tipo')}>
+            <option value=''>Selecione um tipo de busca</option>
             <option value='Ingrediente Principal'>Ingrediente Principal</option>
             <option value='Categoria'>Categoria</option>
             <option value='Local'>Local</option>
