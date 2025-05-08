@@ -5,12 +5,9 @@ import {useForm} from 'react-hook-form'
 const estadoInicial = {
 
   filtros:{
-    Nome_cientifico: '',
-    Nome_popular: '',
-    Localizacao: '',
-    Data:'',
-    Reino:'',
-
+    Ingrediente: '',
+    Local: '',
+    Categoria:'',
   },
   resultados: [],
   status: 'carregando' | 'sucesso' | 'erro',
@@ -64,27 +61,39 @@ function App() {
     dispatch({type: 'SET_FILTROS', payload: data})
   }
 
+  const comunicacao = async () =>{
+    dispatch({type: 'SET_CARREGANDO'})
+    try{
+
+      const resposta = await fetch()
+      const json = await resposta.json()
+      dispatch({type: 'SET_RESULTADOS', payload: json})
+
+    }catch(error){
+
+      dispatch({type: 'SET_ERRO', payload: error.message})
+
+    }
+
+  }
+
   useEffect(() =>{
-    
+    comunicacao()
   },[state.filtros])
+
   
 
   return (
     <div className='geral'>
       <div className='header'>
         <form onSubmit={handleSubmit(onSubmit)}> 
-          <input {...register('Nome_Cientifico')} placeholder='Nome Cientifico'/>
-          <input {...register('Nome_Popular', {required: true, maxLength: 25})} placeholder='Nome Popular'/>
-          {errors.nome_popular && <span>Valor inválido</span>}
-          <input {...register('Localizacao')} placeholder='Localizacao'/>
-          <input type='number'{...register('Data', {min: 1000, max: 2025})} placeholder='Data'/>
-          <select {...register('Reino', {required: true})}>
-            <option value='Fungi'>Fungi</option>
-            <option value='Animalia'>Plantae</option>
-            <option value='Plantae'>Animalia</option>
+          <input {...register('Valor')} placeholder='Valor'/>
+          <select {...register('Tipo', {required: true})}>
+            <option value='Ingrediente Principal'>Ingrediente Principal</option>
+            <option value='Categoria'>Categoria</option>
+            <option value='Localo'>Local</option>
           </select>
           <input type='submit'/>
-
         </form>
       </div>
 
