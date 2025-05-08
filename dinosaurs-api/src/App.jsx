@@ -57,7 +57,11 @@ function App() {
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
   const {register,handleSubmit,watch, setValue,} = useForm()
-  const [listas, setListas] = useState()
+  const [listas, setListas] = useState({
+    ingredientes: [],
+    categorias: [],
+    locais: []
+  })
 
   const watchTipo = watch('Tipo')
 
@@ -70,9 +74,9 @@ function App() {
     const carregarListas = async () =>{
       try{
         const [ingredientes, categorias, locais] = await Promise.all([
-          fetch(), //Adicionar os links
-          fetch(),
-          fetch(),
+          fetch('www.themealdb.com/api/json/v1/1/list.php?i=list'), //Adicionar os links
+          fetch('www.themealdb.com/api/json/v1/1/list.php?c=list'),
+          fetch('www.themealdb.com/api/json/v1/1/list.php?a=list'),
         ])
 
         const [ingredientesJSON, categoriasJSON, locaisJSON] = await Promisse.all([
@@ -144,11 +148,17 @@ function App() {
     <div className='geral'>
       <div className='header'>
         <form onSubmit={handleSubmit(onSubmit)}> 
-          <input {...register('Valor')} placeholder='Valor'/>
-          <select {...register('Tipo', {required: true})}>
+          <select {...register('Tipo')}>
             <option value='Ingrediente Principal'>Ingrediente Principal</option>
             <option value='Categoria'>Categoria</option>
             <option value='Local'>Local</option>
+          </select>
+
+          <select {...register('Valor', {required: true})}>
+            <option value=''>Selecione o Parâmetro</option>
+            {watchTipo === 'Ingrediente Principal' && listas.ingredientes.map((item, index) => (<option key={index} value={item}>{item}</option>))}
+            {watchTipo === 'Categoria' && listas.categorias.map((item, index) => (<option key={index} value={item}>{item}</option>))}
+            {watchTipo === 'Local' && listas.locais.map((item, index) => (<option key={index} value={item}>{item}</option>))}
           </select>
           <input type='submit'/>
         </form>
