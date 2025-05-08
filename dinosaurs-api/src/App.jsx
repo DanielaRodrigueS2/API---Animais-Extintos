@@ -1,13 +1,12 @@
 
-import { useReducer , useEffect} from 'react'
+import { useReducer , useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 
 const estadoInicial = {
 
   filtros:{
-    Ingrediente: '',
-    Local: '',
-    Categoria:'',
+    Tipo: '',
+    Valor: '',
   },
   resultados: [],
   status: 'carregando' | 'sucesso' | 'erro',
@@ -55,7 +54,10 @@ const reducer =  (state, action) =>{
 function App() {
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
-  const {register,handleSubmit,watch,formState: {errors},} = useForm()
+  const {register,handleSubmit,watch, setValue,} = useForm()
+  const [opcoes, setOpcoes] = useState([])
+
+  const watchTipo = watch('Tipo')
 
   const onSubmit = (data) => {
     dispatch({type: 'SET_FILTROS', payload: data})
@@ -65,11 +67,29 @@ function App() {
     dispatch({type: 'SET_CARREGANDO'})
     try{
 
+      let url  = ''
+
+      if(state.filtros.tipo == 'Ingrediente Principal'){
+        url = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=${state.filtros.Valor}'
+      }
+      else if(state.filtros.tipo == 'Categoria'){
+        url = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=${state.filtros.Valor}'
+      }
+      else if(state.filtros.tipo == 'Local'){
+        url = 'https://www.themealdb.com/api/json/v1/1/filter.php?a=${state.filtros.Valor}'
+      }
+      else{
+        setOpcoes([])
+        return
+      }
+
+      
       const resposta = await fetch()
       const json = await resposta.json()
-      dispatch({type: 'SET_RESULTADOS', payload: json})
+      dispatch({type: 'SET_RESULTADOS', payload: json.meals || []})
 
-    }catch(error){
+    }
+    catch(error){
 
       dispatch({type: 'SET_ERRO', payload: error.message})
 
@@ -78,7 +98,11 @@ function App() {
   }
 
   useEffect(() =>{
-    comunicacao()
+
+    if(state.filtros.Valor && state.filtros.Tipo) {
+      comunicacao();
+    }
+    
   },[state.filtros])
 
   
