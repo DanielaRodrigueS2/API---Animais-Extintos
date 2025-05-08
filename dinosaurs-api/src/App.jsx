@@ -9,7 +9,7 @@ const estadoInicial = {
     Valor: '',
   },
   resultados: [],
-  status: 'carregando' | 'sucesso' | 'erro',
+  status: 'inical',
   erro: null,
 
 }
@@ -69,29 +69,28 @@ function App() {
 
       let url  = ''
 
-      if(state.filtros.tipo == 'Ingrediente Principal'){
-        url = 'https://www.themealdb.com/api/json/v1/1/filter.php?i=${state.filtros.Valor}'
+      if(state.filtros.Tipo == 'Ingrediente Principal'){
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${state.filtros.Valor}`
       }
-      else if(state.filtros.tipo == 'Categoria'){
-        url = 'https://www.themealdb.com/api/json/v1/1/filter.php?c=${state.filtros.Valor}'
+      else if(state.filtros.Tipo == 'Categoria'){
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${state.filtros.Valor}`
       }
-      else if(state.filtros.tipo == 'Local'){
-        url = 'https://www.themealdb.com/api/json/v1/1/filter.php?a=${state.filtros.Valor}'
-      }
-      else{
-        setOpcoes([])
-        return
+      else if(state.filtros.Tipo == 'Local'){
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${state.filtros.Valor}`
       }
 
-      
-      const resposta = await fetch()
+      if (!url) return;
+
+      const resposta = await fetch(url)
       const json = await resposta.json()
       dispatch({type: 'SET_RESULTADOS', payload: json.meals || []})
+      console.log(state.resultados)
 
     }
     catch(error){
 
       dispatch({type: 'SET_ERRO', payload: error.message})
+      console.log(state.erro)
 
     }
 
@@ -102,7 +101,7 @@ function App() {
     if(state.filtros.Valor && state.filtros.Tipo) {
       comunicacao();
     }
-    
+
   },[state.filtros])
 
   
@@ -115,7 +114,7 @@ function App() {
           <select {...register('Tipo', {required: true})}>
             <option value='Ingrediente Principal'>Ingrediente Principal</option>
             <option value='Categoria'>Categoria</option>
-            <option value='Localo'>Local</option>
+            <option value='Local'>Local</option>
           </select>
           <input type='submit'/>
         </form>
