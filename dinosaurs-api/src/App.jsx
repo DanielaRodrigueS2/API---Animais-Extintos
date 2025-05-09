@@ -1,6 +1,7 @@
 
 import { useReducer , useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
+import '.App.css'
 
 // Armazena o Tipo de pesquisa e seu valor correpondente, armazena os resultados, erros e status
 const estadoInicial = {
@@ -174,6 +175,7 @@ function App() {
             {watchTipo === 'Categoria' && listas.categorias.map((item) => (<option key={item} value={item}>{item}</option>))}
             {watchTipo === 'Local' && listas.locais.map((item) => (<option key={item} value={item}>{item}</option>))}
           </select>
+          
           <input type='submit'/>
         </form>
       </div>
