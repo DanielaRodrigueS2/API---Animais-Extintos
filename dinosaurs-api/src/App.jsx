@@ -183,7 +183,7 @@ function App() {
       </div>
 
       <div className='main'>
-        {state.resultados.length > 0 && <SwiperComponente resultados={state.resultados} style={{width: '100%', height: '100%', border: '5px solid black'}}></SwiperComponente>}
+        {state.resultados.length > 0 && <SwiperComponente resultados={state.resultados} style={{width: '80%', height: '80%'}}></SwiperComponente>}
       </div>
 
     </div>

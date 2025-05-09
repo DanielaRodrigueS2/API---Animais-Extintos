@@ -10,8 +10,8 @@ html, body, #root{
     height: 100%;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-    /*background-color: blueviolet; */
+    justify-content: space-between;
+    background-color: rgb(37, 22, 5); 
     
 }
 
@@ -22,7 +22,7 @@ html, body, #root{
     height: 10%;
     justify-content: center;
     align-items: center;
-    background-color: rgb(11, 108, 194);
+    background-color: rgb(246, 226, 127);
     margin-bottom: 10;
 }
 
@@ -30,7 +30,8 @@ html, body, #root{
     display: flex;
     width: 80%;
     height: 60%;
+    margin: auto;
     align-items: center;
-    border: 1px solid red;
-    /*background-color: black;*/
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(226, 195, 145);
 }
