@@ -178,12 +178,14 @@ function App() {
           </select>
 
           <input type='submit'/>
+
         </form>
       </div>
 
       <div className='main'>
-        {state.resultados.length > 0 && <SwiperComponente resultados={state.resultados}></SwiperComponente>}
+        {state.resultados.length > 0 && <SwiperComponente resultados={state.resultados} style={{width: '100%', height: '100%', border: '5px solid black'}}></SwiperComponente>}
       </div>
+
     </div>
   )
 

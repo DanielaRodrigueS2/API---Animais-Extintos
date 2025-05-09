@@ -4,9 +4,10 @@ import 'swiper/css'
 function SwiperComponente(props){
     return(
         <Swiper
-            spaceBetween={50}
-            slidesPerView={4}
-        
+            style={props.style}
+            spaceBetween={100}
+            slidesPerView={3}
+            
         >
             {props.resultados.map((item) => (
                 <SwiperSlide key={item.idMeal} onClick={() => alert(item.strMeal)}>
