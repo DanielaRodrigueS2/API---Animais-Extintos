@@ -1,7 +1,7 @@
-import {Swiper, SwperSlide} from 'swiper/react'
+import {Swiper, SwiperSlide} from 'swiper/react'
 import 'swiper/css'
 
-function Swiper(props){
+function SwiperComponente(props){
     return(
         <Swiper
             spaceBetween={50}
@@ -9,13 +9,13 @@ function Swiper(props){
         
         >
             {props.resultados.map((item) => (
-                <SwperSlide key={item.idMeal} onClick={() => alert(item.strMeal)}>
+                <SwiperSlide key={item.idMeal} onClick={() => alert(item.strMeal)}>
                     <img src={item.strMealThumb} alt={item.strMeal}/>
-                </SwperSlide>
+                </SwiperSlide>
             ))}
 
         </Swiper>
     );
 }
 
-export default Swiper
+export default SwiperComponente
