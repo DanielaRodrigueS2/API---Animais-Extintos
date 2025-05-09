@@ -3,6 +3,7 @@ import { useReducer , useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import './App.css'
 import SwiperComponente from './components/SwiperComponente'
+import { ContextoTema,  } from './contexts/ContextoTema' //Tentei Aplicar mas não funcionou
 
 // Armazena o Tipo de pesquisa e seu valor correpondente, armazena os resultados, erros e status
 const estadoInicial = {
@@ -160,6 +161,7 @@ function App() {
   }, [state.resultados])
 
   return (
+
     <div className='geral'>
       <div className='header'>
         <form onSubmit={handleSubmit(onSubmit)}> 
