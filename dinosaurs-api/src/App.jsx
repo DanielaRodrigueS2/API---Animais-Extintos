@@ -1,9 +1,9 @@
 
-import { useReducer , useEffect, useState} from 'react'
+import { useReducer , useEffect, useState, useContext} from 'react'
 import {useForm} from 'react-hook-form'
 import './App.css'
 import SwiperComponente from './components/SwiperComponente'
-import { ContextoTema,  } from './contexts/ContextoTema' //Tentei Aplicar mas não funcionou
+import { ContextoTema} from './contexts/ContextoTema'
 
 // Armazena o Tipo de pesquisa e seu valor correpondente, armazena os resultados, erros e status
 const estadoInicial = {
@@ -57,6 +57,9 @@ const reducer =  (state, action) =>{
 }
 
 function App() {
+
+  // Tema do use Context
+  const {tema, trocarTema} = useContext(ContextoTema)
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
   const {register,handleSubmit,watch, setValue,} = useForm({
@@ -65,6 +68,7 @@ function App() {
       Valor: '',
     }
   })
+
   const [listas, setListas] = useState({
     ingredientes: [],
     categorias: [],
@@ -160,9 +164,11 @@ function App() {
     console.log(state.resultados)
   }, [state.resultados])
 
+  
+
   return (
 
-    <div className='geral'>
+    <div className={`geral ${tema === 'Normal' ? 'normal' : 'reverso'}`}>
       <div className='header'>
         <form onSubmit={handleSubmit(onSubmit)}> 
           <select {...register('Tipo')}>
@@ -182,6 +188,10 @@ function App() {
           <input type='submit'/>
 
         </form>
+
+        <button onClick={trocarTema} className='BotaoTroca'>
+            Trocar Tema (Atual: {tema})
+        </button>
       </div>
 
       <div className='main'>
