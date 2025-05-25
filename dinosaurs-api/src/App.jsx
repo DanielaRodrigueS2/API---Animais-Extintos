@@ -4,6 +4,7 @@ import {useForm} from 'react-hook-form'
 import './App.css'
 import SwiperComponente from './components/SwiperComponente'
 import { ContextoTema} from './contexts/ContextoTema'
+import CardComida from './components/CardComida'
 
 // Armazena o Tipo de pesquisa e seu valor correpondente, armazena os resultados, erros e status
 const estadoInicial = {
@@ -60,6 +61,9 @@ function App() {
 
   // Tema do use Context
   const {tema, trocarTema} = useContext(ContextoTema)
+
+  //Item selecionado/clicado pelo cursor
+  const [item, setItem] = useState(null)
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
   const {register,handleSubmit,watch, setValue,} = useForm({
@@ -195,8 +199,10 @@ function App() {
       </div>
 
       <div className='main'>
-        {state.resultados.length > 0 && <SwiperComponente resultados={state.resultados} style={{width: '80%', height: '80%'}}></SwiperComponente>}
+        {state.resultados.length > 0 && <SwiperComponente clicado={setItem} resultados={state.resultados} style={{width: '80%', height: '80%'}}></SwiperComponente>}
+        
       </div>
+      {item != null && <CardComida clicado={setItem} comida={item}></CardComida>}
 
     </div>
   )
