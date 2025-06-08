@@ -62,8 +62,11 @@ function App() {
   // Tema do use Context
   const {tema, trocarTema} = useContext(ContextoTema)
 
-  //Item selecionado/clicado pelo cursor
+  //Id da comida/item clicado
   const [item, setItem] = useState(null)
+
+  //Dados da comida clicada
+  const [comida, setComida] = useState(null)
   
   const [state, dispatch] = useReducer(reducer, estadoInicial)
   const {register,handleSubmit,watch, setValue,} = useForm({
@@ -150,6 +153,30 @@ function App() {
 
   }
 
+  //Função para retornar dados de uma comida especifica
+  useEffect(() => {
+
+    if (!item) return;
+
+    const resgataComida = async () => {
+      try{
+
+        const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${item.idMeal}`
+        const resposta = await fetch(url)
+        const json = await resposta.json()
+        setComida(json.meals[0])
+        console.log('Comida: ',comida)
+
+      }
+      catch(error){
+        console.log('Erro ao carregaara/ buscar comida', error)
+      }
+
+    }
+    resgataComida()
+
+  }, [item])
+
   // Chama a comunicação() quando os filtros são alterados
   useEffect(() =>{
 
@@ -202,7 +229,7 @@ function App() {
         {state.resultados.length > 0 && <SwiperComponente clicado={setItem} resultados={state.resultados} style={{width: '80%', height: '80%'}}></SwiperComponente>}
         
       </div>
-      {item != null && <CardComida clicado={setItem} comida={item}></CardComida>}
+      {item != null && comida && <CardComida clicado={setItem} comida={comida}></CardComida>}
 
     </div>
   )

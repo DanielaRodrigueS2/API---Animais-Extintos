@@ -45,3 +45,11 @@ html, body, #root{
     align-items: center;
     background-color: rgb(226, 195, 145);
 }
+
+select, input, button{
+    border: 5px;
+    border-radius: 5px;
+    background-color: rgb(216, 161, 71);
+    border-radius: 2px;
+    border-color: black;
+}

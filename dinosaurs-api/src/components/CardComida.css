@@ -19,3 +19,11 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
+
+.card h2, .card h3{
+  word-wrap: break-word;     
+  overflow-wrap: break-word; 
+  max-width: 100%;
+  margin: 10px 0;
+  text-align: center;
+}
